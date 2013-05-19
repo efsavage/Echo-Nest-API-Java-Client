@@ -137,7 +137,7 @@ public class EchoNestAPI {
 
     /**
      * Gets similar artists given a set of params (See ArtistParams)
-     * 
+     *
      * @param p
      * @return
      * @throws EchoNestException
@@ -169,7 +169,7 @@ public class EchoNestAPI {
 
     /**
      * Search for artists given a set of params (See ArtistParams)
-     * 
+     *
      * @param p
      * @return
      * @throws EchoNestException
@@ -186,10 +186,10 @@ public class EchoNestAPI {
         }
         return artistResults;
     }
-    
+
     /**
      * Suggest artists given a set of params (See ArtistParams)
-     * 
+     *
      * @param p
      * @return
      * @throws EchoNestException
@@ -206,10 +206,10 @@ public class EchoNestAPI {
         }
         return artistResults;
     }
-    
+
     /**
      * Suggest artists by name
-     * 
+     *
      * @param name
      * @return
      * @throws EchoNestException
@@ -222,7 +222,7 @@ public class EchoNestAPI {
 
     /**
      * Gets the most frequently occurring top terms
-     * 
+     *
      * @param count
      *            the number of terms to return
      * @return a list of top terms
@@ -447,12 +447,12 @@ public class EchoNestAPI {
     /**
      * Upload a track
      * 
-     * @param trackFile
+     * @param audioFile
      *            the file to upload
      * @param wait
      *            if true, wait for the analysis
      * @return the ID of the track
-     * @throws com.echonest.api.v3.artist.EchoNestException
+     * @throws EchoNestException
      */
 
     @SuppressWarnings("unchecked")
@@ -542,8 +542,6 @@ public class EchoNestAPI {
     /**
      * Creates a track from a track ID
      * 
-     * @param id
-     *            the ID or MD5 of the track
      * @return a new track
      */
     public Track newTrackByMD5(String md5) throws EchoNestException {
@@ -666,8 +664,27 @@ public class EchoNestAPI {
         ArtistCatalog catalog = newArtistCatalog(id, nname);
         return catalog;
     }
-    
-    
+
+    /**
+     * list an artist catalog by name
+     *
+     * @param name
+     *            the name of the catalog
+     */
+
+    @SuppressWarnings("unchecked")
+    public ArtistCatalog getArtistCatalog(String name)
+            throws EchoNestException {
+        Params p = new Params();
+        p.add("name", name);
+        p.add("type", "artist");
+        Map results = cmd.sendCommand("catalog/profile", p, true);
+        Map response = (Map) results.get("response");
+        String id = (String) response.get("id");
+        String nname = (String) response.get("name");
+        ArtistCatalog catalog = newArtistCatalog(id, nname);
+        return catalog;
+    }
 
     /**
      * List all artist catalogs created with this API key
